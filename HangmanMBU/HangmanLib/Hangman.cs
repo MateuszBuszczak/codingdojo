@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HangmanLib
 {
@@ -10,23 +6,22 @@ namespace HangmanLib
     {
         private readonly string Secret;
         private string Result;
-        private long attemptsLeft;
 
         public Hangman(string secret, long maxAttempts)
         {
             Secret = secret;
             Result = new string('-', secret.Length);
-            attemptsLeft = maxAttempts;
+            RemainingAttempts = maxAttempts;
         }
 
-        public long RemainingAttempts => attemptsLeft;
+        public long RemainingAttempts { get; private set; }
         public bool IsResolved => string.Compare(Secret, Result, StringComparison.OrdinalIgnoreCase) == 0;
 
         public string Guess(char letter)
         {
-            if (attemptsLeft > 0)
+            if (RemainingAttempts > 0)
             {
-                attemptsLeft -= 1;
+                RemainingAttempts -= 1;
                 string testLetter = $"{letter}".ToUpper();
                 int index = -1;
                 do
