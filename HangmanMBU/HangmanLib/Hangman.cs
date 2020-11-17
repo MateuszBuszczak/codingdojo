@@ -10,27 +10,36 @@ namespace HangmanLib
     {
         private readonly string Secret;
         private string Result;
-        public Hangman(string secret) 
+        private long attemptsLeft;
+
+        public Hangman(string secret, long maxAttempts)
         {
             Secret = secret;
             Result = new string('-', secret.Length);
+            attemptsLeft = maxAttempts;
         }
+
+        public long RemainingAttempts => attemptsLeft;
+        public bool IsResolved => string.Compare(Secret, Result, StringComparison.OrdinalIgnoreCase) == 0;
 
         public string Guess(char letter)
         {
-            string testLetter = $"{letter}";
-            int index = -1;
-            do
+            if (attemptsLeft > 0)
             {
-                index += 1;
-                index = Secret.IndexOf(testLetter, index, StringComparison.OrdinalIgnoreCase);
-                if(index > -1 )
+                attemptsLeft -= 1;
+                string testLetter = $"{letter}".ToUpper();
+                int index = -1;
+                do
                 {
-                    Result = Result.Insert(index, testLetter);
-                    Result = Result.Remove(index + 1, 1);
-                }                
-            } while (index != -1);
-
+                    index += 1;
+                    index = Secret.IndexOf(testLetter, index, StringComparison.OrdinalIgnoreCase);
+                    if (index > -1)
+                    {
+                        Result = Result.Insert(index, testLetter);
+                        Result = Result.Remove(index + 1, 1);
+                    }
+                } while (index != -1);
+            }
             return Result;
         }
     }

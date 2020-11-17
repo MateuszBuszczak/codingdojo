@@ -9,5 +9,10 @@ namespace HangmanLib
     public interface HangmanInterface
     {
         string Guess(char letter);
+
+        bool IsResolved { get; }
+
+        long RemainingAttempts { get; }
+
     }
 }
